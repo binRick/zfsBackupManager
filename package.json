@@ -1,0 +1,23 @@
+{
+  "name": "zfsbackupmanager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/binRick/zfsBackupManager.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/binRick/zfsBackupManager/issues"
+  },
+  "homepage": "https://github.com/binRick/zfsBackupManager#readme",
+  "dependencies": {
+    "async": "^2.5.0",
+    "underscore": "^1.8.3"
+  }
+}
