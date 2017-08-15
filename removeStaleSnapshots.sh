@@ -1,7 +1,6 @@
 #!/bin/sh
-export L=10
 #remove snapshots that do not have backuplog property
-for snap in `zfs list -t snap -o name| grep ^tank/Backups/[a-z]*./[0-9]*.@zfs-auto-snap_backup-| head -n $L`; do
+for snap in `zfs list -t snap -o name| grep ^tank/Backups/[a-z]*./[0-9]*.@zfs-auto-snap_backup-`; do
 	echo "Checking Snapshot $snap" | style -C red -B black
 	export FS=$(echo $snap | cut -d'@' -f1)
 	export SNAP=$(echo $snap | cut -d'@' -f2)
