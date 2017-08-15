@@ -20,6 +20,7 @@
     "async": "^2.5.0",
     "chalk": "^2.1.0",
     "commander": "^2.11.0",
+    "condense-whitespace": "^1.0.0",
     "pretty-json": "^0.1.1",
     "prettyjson": "^1.2.1",
     "underscore": "^1.8.3"
