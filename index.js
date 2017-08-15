@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 var config = require('./config'),
-cw = require('condense-whitespace'),
-_ = require('underscore'),
+    cw = require('condense-whitespace'),
+    _ = require('underscore'),
     c = require('chalk'),
     pj = require('prettyjson'),
     child = require('child_process'),
@@ -36,13 +36,18 @@ var snapshots = child.execSync('zfs list -t snap -o name').toString().split('\n'
         return l && lA[0] != 'tput:' && lA[0] != 'Warning:';
     });
     return s;
-}).map(function(s){
-	_.each(s.logData, function(l){
-		var lA = l.split(':');
-		if(lA[0]=='Number of files')
-			s.files=cw(l);
-	});
-	return s;
+}).map(function(s) {
+    _.each(s.logData, function(l) {
+        var lA = l.split(':');
+        if (lA[0] == 'Number of files') 
+            s.files = parseInt(cw(l).split(' ')[5].replace(/,/g,''));
+        else if (lA[0] == 'Total file size') 
+            s.totalFileSize = parseInt(cw(l).split(' ')[3].replace(/,/g,''));
+        else if (lA[0] == 'Total transferred file size') 
+            s.totalTransferredFileSize = parseInt(cw(l).split(' ')[4].replace(/,/g,''));
+
+    });
+    return s;
 });
 var Setup = {
     node: p.node,
@@ -53,6 +58,6 @@ var Setup = {
 
 if (p.output == 'json') {
     console.log(JSON.stringify(Setup));
-}else{
+} else {
     console.log(pj.render(Setup));
 }
