@@ -25,6 +25,8 @@
     "express": "^4.15.4",
     "pretty-json": "^0.1.1",
     "prettyjson": "^1.2.1",
+    "regex": "^0.1.1",
+    "socket.io": "^2.0.3",
     "underscore": "^1.8.3"
   }
 }
