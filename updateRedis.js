@@ -6,27 +6,49 @@ var spawn = require('child_process').spawn,
     ZFS = require('./node-zfs'),
     fs = require('fs'),
     pb = require('pretty-bytes'),
-    redis = require('redis'),
-    client = redis.createClient(),
     NRP = require('node-redis-pubsub'),
-    nrp = new NRP();
+    nrp = new NRP(),
+    async = require('async');
 
 
 
-client.on("error", function(err) {
-    console.log("Redis Error: " + err);
+
+nrp.on('Nodes', function(myNodes) {
+    console.log('got nodes', myNodes.length);
+    async.mapSeries(myNodes, function(Node, _cb) {
+
+    }, function(errs, results) {
+
+    });
 });
 
-
-var zfsList = function(_cb) {
+var zfsList = function() {
     var listSpawn = spawn('zfs', ['list', '-pHoname']);
     var o = '';
     listSpawn.on('exit', function(code) {
         if (code != 0) throw code;
         var lines = o.split('\n').filter(function(l) {
             return l;
-        }).filter(config.zfsListFilters.nodes).map(config.zfsListMaps.nodes);
-        _cb(lines);
+        });
+        var nodes = lines.filter(config.zfsListFilters.nodes).map(config.zfsListMaps.nodes);
+        nrp.emit('Nodes', nodes);
+        nrp.emit('Filesystems', lines);
+    }).stdout.on('data', function(s) {
+        o += s.toString();
+    });
+    listSpawn.stderr.on('data', function(s) {
+        throw s;
+    });
+};
+var zfsListSnapshots = function(){
+    var listSpawn = spawn('zfs', ['list', '-pHoname','-tsnap']);
+    var o = '';
+    listSpawn.on('exit', function(code) {
+        if (code != 0) throw code;
+        var lines = o.split('\n').filter(function(l) {
+            return l;
+        });
+        nrp.emit('Snapshots', lines);
     }).stdout.on('data', function(s) {
         o += s.toString();
     });
@@ -35,15 +57,15 @@ var zfsList = function(_cb) {
     });
 };
 
-var updateRedis = function() {
-    zfsList(function(Nodes) {
-        nrp.emit('Nodes', Nodes);
-    });
-};
-
+var zfsListSnapshotsJob = new CronJob({
+    cronTime: '0 */15 * * * *',
+    onTick: zfsListSnapshots,
+    start: true,
+    runOnInit: true,
+});
 var zfsListJob = new CronJob({
     cronTime: '0 */1 * * * *',
-    onTick: updateRedis,
+    onTick: zfsList,
     start: true,
     runOnInit: true,
 });

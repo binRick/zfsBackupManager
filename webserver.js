@@ -18,24 +18,32 @@ var fs = require('fs'),
     io = require('socket.io')(server),
     spawn = require('child_process').spawn,
     NRP = require('node-redis-pubsub'),
-nrp = new NRP(),
-    redis = require('redis'),
-    client = redis.createClient();
+    nrp = new NRP();
 
-var Nodes = [];
+var Nodes = [],
+    Filesystems = [],
+    Snapshots = [];
 
-nrp.on('Nodes', function(myNodes){
-  console.log('Received ' + myNodes.length + ' Nodes');
-	Nodes = myNodes;
+nrp.on('Nodes', function(myNodes) {
+    console.log('Received ' + myNodes.length + ' Nodes');
+    Nodes = myNodes;
+});
+nrp.on('Filesystems', function(myFilesystems) {
+    console.log('Received ' + myFilesystems.length + ' Filesystems');
+    Filesystems = myFilesystems;
+});
+nrp.on('Snapshots', function(mySnapshots) {
+    console.log('Received ' + mySnapshots.length + ' Snapshots');
+    Snapshots = mySnapshots;
 });
 
 app.use(express.static('www'));
 
 app.get('/', function(req, res) {
-	res.sendFile(__dirname+'/www/index.html');
+    res.sendFile(__dirname + '/www/index.html');
 });
 app.get('/api/nodes', function(req, res) {
-	res.json(Nodes);
+    res.json(Nodes);
 });
 app.get('/api/node/:node', function(req, res) {
     var properties = ['used', 'logicalused'];
