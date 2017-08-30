@@ -16,38 +16,26 @@ var fs = require('fs'),
     app = express(),
     server = require('http').createServer(app),
     io = require('socket.io')(server),
-    spawn = require('child_process').spawn;
+    spawn = require('child_process').spawn,
+    NRP = require('node-redis-pubsub'),
+nrp = new NRP(),
+    redis = require('redis'),
+    client = redis.createClient();
 
+var Nodes = [];
 
-var zfsList = function(_cb) {
-    var listSpawn = spawn('zfs', ['list', '-pHoname']);
-    var o = '';
-    listSpawn.on('exit', function(code) {
-        if (code != 0) throw code;
-        var lines = o.split('\n').filter(function(l) {
-            return l;
-        }).filter(config.zfsListFilters.nodes).map(config.zfsListMaps.nodes);
-        _cb(lines);
-    }).stdout.on('data', function(s) {
-        o += s.toString();
-    });
-    listSpawn.stderr.on('data', function(s) {
-        throw s;
-    });
-};
+nrp.on('Nodes', function(myNodes){
+  console.log('Received ' + myNodes.length + ' Nodes');
+	Nodes = myNodes;
+});
 
 app.use(express.static('www'));
 
 app.get('/', function(req, res) {
-    fs.readFile(__dirname + '/www/index.html', function(d) {
-        res.send(d);
-
-    });
+	res.sendFile(__dirname+'/www/index.html');
 });
 app.get('/api/nodes', function(req, res) {
-    zfsList(function(list) {
-        res.json(list);
-    });
+	res.json(Nodes);
 });
 app.get('/api/node/:node', function(req, res) {
     var properties = ['used', 'logicalused'];
@@ -63,9 +51,9 @@ app.get('/api/node/:node', function(req, res) {
             ZFS.zfs.get(fs, properties, true, function(err, properties) {
                 if (err) throw err;
                 var obj = properties[fs];
-_.each(pretties, function(pretty){
-	obj[pretty+'_pb'] = pb(parseInt(obj[pretty]));
-});
+                _.each(pretties, function(pretty) {
+                    obj[pretty + '_pb'] = pb(parseInt(obj[pretty]));
+                });
                 myCache.set(key, obj, function(err, success) {
                     if (err) throw err;
                     res.json(obj);
