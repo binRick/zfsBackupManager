@@ -25,19 +25,26 @@ var fs = require('fs'),
 
 nrp.on('Filesystems', function(myFilesystems) {
     console.log('Received ' + myFilesystems.Filesystems.length + ' Filesystems on node ' + myFilesystems.Node + ' among ' + myFilesystems.Nodes.length + ' nodes.');
-    Filesystems = myFilesystems;
-	
+	io.emit('Filesystems',myFilesystems);
+	io.emit('Nodes', {Node: myFilesystems.Node, Nodes: myFilesystems.Nodes});
+});
+nrp.on('BackupNodes', function(BackupNodes) {
+	io.emit('BackupNodes',BackupNodes);
+});
+nrp.on('nodeStat', function(nodeStat) {
+	io.emit('nodeStat',nodeStat);
 });
 nrp.on('Snapshots', function(mySnapshots) {
     console.log('Received ' + mySnapshots.Snapshots.length + ' Snapshots on node ' + mySnapshots.Node);
-    Snapshots = mySnapshots;
+	io.emit('Snapshots', mySnapshots);
 });
-io.on('connection', function(client) {  
+
+io.on('connection', function(socket) {  
+	nrp.emit('clientConnected',{});
     console.log('Client connected...');
-    client.on('join', function(data) {
+    socket.on('join', function(data) {
         console.log(data);
     });
-
 });
 
 

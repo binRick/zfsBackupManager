@@ -1,4 +1,6 @@
 module.exports = {
+    nodeStat: true,
+    nodeStatInterval: 5,
     backupNodes: ['beo','gordo','iraq'],
     pool: 'tank',
     webserver: {

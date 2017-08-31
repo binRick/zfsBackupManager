@@ -6,28 +6,39 @@
     <script type="text/javascript" src="/js/dist/w2ui/dist/w2ui-1.5.rc1.min.js"></script>
     <script type="text/javascript" src="/js/dist/socket.io.js"></script>
     <script type="text/javascript" src="/js/dist/underscore-min.js"></script>
+    <script type="text/javascript" src="/js/manageGridFunctions.js"></script>
     <link rel="stylesheet" type="text/css" href="/js/dist/w2ui/dist/w2ui-dark.css" />
 </head>
 <body>
 
-<div id="grid1" style="position: absolute; left: 0px;  width: 49.9%; height: 400px;"></div>
+<div id="backupNodesGrid" style="position: absolute; left: 0px;  width: 49.9%; height: 400px;"></div>
 <div id="grid2" style="position: absolute; right: 0px; width: 49.9%; height: 400px;"></div>
 <div id="grid3" style="position: absolute; top: 410px; left: 0px; width: 49.9%; height: 400px;"></div>
 <div id="grid4" style="position: absolute; top: 410px; right: 0px; width: 49.9%; height: 400px;"></div>
-<script>  
+<script>
+var startSocket = function(){
     var socket = io.connect();
     socket.on('connect', function(data) {
-	console.log('socketio connected');
+        console.log('socketio connected');
         socket.emit('join', 'Hello World from client');
+        socket.on('Snapshots', loadSnapshots);
+        socket.on('Filesystems', loadFilesystems);
+        socket.on('Nodes', loadNodes);
+        socket.on('BackupNodes', loadBackupNodes);
+        socket.on('nodeStat', function(nodeStat){
+//              console.log('Received nodeStat data for node ' + nodeStat.Node);
+//              console.log(nodeStat);
+        });
     });
+};
 </script>
-
 <script type="text/javascript">
 $(function () {
-    $('#grid1').w2grid({ 
-        name: 'grid1', 
+    $('#backupNodesGrid').w2grid({ 
+        header: 'Backup Nodes',
+        name: 'backupNodesGrid', 
         columns: [                
-            { field: 'serverName', caption: 'Server', size: '150px' },
+            { field: 'name', caption: 'Server', size: '150px' },
             { field: 'logicalused_pb', caption: 'Logical Used', size: '100px' },
             { field: 'used_pb', caption: 'Used', size: '75px' },
         ],
@@ -50,7 +61,7 @@ $(function () {
             { field: 'serverName', caption: 'Server', size: '150px' },
             { field: 'logicalused_pb', caption: 'Logical Used', size: '100px' },
             { field: 'used_pb', caption: 'Used', size: '75px' },
-        ]
+        ],
     }); 
     $('#grid3').w2grid({
         header: 'Details',
@@ -66,8 +77,8 @@ $(function () {
             { field: 'value', caption: 'Value', size: '100%' }
         ]
     });
+	startSocket();
 });
 </script>
-<script type="text/javascript" src="/js/loadServers.js"></script>
 </body>
 </html>
