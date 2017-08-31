@@ -7,6 +7,7 @@
     <script type="text/javascript" src="/js/dist/socket.io.js"></script>
     <script type="text/javascript" src="/js/dist/underscore-min.js"></script>
     <script type="text/javascript" src="/js/dist/jquery.peity.min.js"></script>
+    <script type="text/javascript" src="/js/dist/filesize.min.js"></script>
     <script type="text/javascript" src="/js/manageGridFunctions.js"></script>
     <link rel="stylesheet" type="text/css" href="/js/dist/w2ui/dist/w2ui-dark.css" />
 </head>
@@ -48,6 +49,8 @@ $(function () {
     $('#backupNodesGrid').w2grid({ 
         header: 'Backup Nodes',
         name: 'backupNodesGrid', 
+	onRender: function(){
+	}, 
         columns: [                
             { field: 'name', caption: 'Server', size: '150px' },
             { field: 'health', caption: 'Health', size: '70px' },

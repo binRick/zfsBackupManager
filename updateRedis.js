@@ -58,7 +58,6 @@ var backupNodes = function() {
             cmd.unshift(node);
             cmd.unshift('ssh');
         }
-        console.log(cmd.slice(1, cmd.length));
         var zpoolSpawn = spawn(cmd[0], cmd.slice(1, cmd.length));
         var o = '';
         zpoolSpawn.on('exit', function(code) {
