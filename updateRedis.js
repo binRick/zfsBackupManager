@@ -72,7 +72,7 @@ var zfsListSnapshotsJob = new CronJob({
     runOnInit: true,
 });
 var zfsListJob = new CronJob({
-    cronTime: '0 */1 * * * *',
+    cronTime: '0 */5 * * * *',
     onTick: zfsList,
     start: true,
     runOnInit: true,

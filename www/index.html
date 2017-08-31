@@ -4,6 +4,7 @@
     <title>W2UI Demo: grid-7</title>
     <script src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/dist/w2ui/dist/w2ui-1.5.rc1.min.js"></script>
+    <script type="text/javascript" src="/js/dist/socket.io.js"></script>
     <script type="text/javascript" src="/js/dist/underscore-min.js"></script>
     <link rel="stylesheet" type="text/css" href="/js/dist/w2ui/dist/w2ui-dark.css" />
 </head>
@@ -11,7 +12,13 @@
 
 <div id="grid1" style="position: absolute; left: 0px; width: 49.9%; height: 400px;"></div>
 <div id="grid2" style="position: absolute; right: 0px; width: 49.9%; height: 400px;"></div>
-
+<script>  
+    var socket = io.connect();
+    socket.on('connect', function(data) {
+	console.log('socketio connected');
+        socket.emit('join', 'Hello World from client');
+    });
+</script>
 
 <script type="text/javascript">
 $(function () {

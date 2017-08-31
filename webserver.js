@@ -36,6 +36,15 @@ nrp.on('Snapshots', function(mySnapshots) {
     console.log('Received ' + mySnapshots.length + ' Snapshots');
     Snapshots = mySnapshots;
 });
+io.on('connection', function(client) {  
+    console.log('Client connected...');
+    client.on('join', function(data) {
+        console.log(data);
+    });
+
+});
+
+
 
 app.use(express.static('www'));
 
