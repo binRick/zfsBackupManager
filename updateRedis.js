@@ -10,9 +10,16 @@ var spawn = require('child_process').spawn,
     nrp = new NRP(),
     async = require('async');
 
+var Nodes = [],
+	Filesystems = [],
+	Snapshots = [];
 
 
-
+nrp.on('webserverStarted', function() {
+        nrp.emit('Nodes', Nodes);
+        nrp.emit('Filesystems', Filesystems);
+        nrp.emit('Snapshots', Snapshots);
+});
 nrp.on('Nodes', function(myNodes) {
     console.log('got nodes', myNodes.length);
     async.mapSeries(myNodes, function(Node, _cb) {
@@ -30,9 +37,10 @@ var zfsList = function() {
         var lines = o.split('\n').filter(function(l) {
             return l;
         });
-        var nodes = lines.filter(config.zfsListFilters.nodes).map(config.zfsListMaps.nodes);
-        nrp.emit('Nodes', nodes);
-        nrp.emit('Filesystems', lines);
+	Filesystems = lines;
+        Nodes = lines.filter(config.zfsListFilters.nodes).map(config.zfsListMaps.nodes);
+        nrp.emit('Nodes', Nodes);
+        nrp.emit('Filesystems', Filesystems);
     }).stdout.on('data', function(s) {
         o += s.toString();
     });
@@ -45,10 +53,10 @@ var zfsListSnapshots = function(){
     var o = '';
     listSpawn.on('exit', function(code) {
         if (code != 0) throw code;
-        var lines = o.split('\n').filter(function(l) {
+        Snapshots = o.split('\n').filter(function(l) {
             return l;
         });
-        nrp.emit('Snapshots', lines);
+        nrp.emit('Snapshots', Snapshots);
     }).stdout.on('data', function(s) {
         o += s.toString();
     });

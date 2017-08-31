@@ -75,4 +75,5 @@ app.get('/api/node/:node', function(req, res) {
 
 server.listen(config.webserver.port, config.webserver.host, function() {
     console.log('Webserver listening on port', config.webserver.port);
+	nrp.emit('webserverStarted',{});
 });
