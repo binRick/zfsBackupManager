@@ -1,21 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>W2UI Demo: grid-7</title>
+    <title>Backups Overview</title>
     <script src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/dist/w2ui/dist/w2ui-1.5.rc1.min.js"></script>
     <script type="text/javascript" src="/js/dist/socket.io.js"></script>
     <script type="text/javascript" src="/js/dist/underscore-min.js"></script>
+    <script type="text/javascript" src="/js/dist/jquery.peity.min.js"></script>
     <script type="text/javascript" src="/js/manageGridFunctions.js"></script>
     <link rel="stylesheet" type="text/css" href="/js/dist/w2ui/dist/w2ui-dark.css" />
 </head>
 <body>
+<span class="pie">3/5</span>
+<span class="donut">5,2,3</span>
+<span class="line">3,5,1,6,2</span>
+<span class="bar">2,5,3,6,2,1</span>
+<span class="line">5,3,9,6,5,9,7,3,5,2</span>
 
 <div id="backupNodesGrid" style="position: absolute; left: 0px;  width: 49.9%; height: 400px;"></div>
 <div id="grid2" style="position: absolute; right: 0px; width: 49.9%; height: 400px;"></div>
 <div id="grid3" style="position: absolute; top: 410px; left: 0px; width: 49.9%; height: 400px;"></div>
 <div id="grid4" style="position: absolute; top: 410px; right: 0px; width: 49.9%; height: 400px;"></div>
 <script>
+$(".pie").peity("pie");
+$(".donut").peity("donut");
+$(".line").peity("line");
+$(".bar").peity("bar");
+$(".line").peity("line",{ width: 64 });
 var startSocket = function(){
     var socket = io.connect();
     socket.on('connect', function(data) {
@@ -40,8 +51,8 @@ $(function () {
         columns: [                
             { field: 'name', caption: 'Server', size: '150px' },
             { field: 'health', caption: 'Health', size: '70px' },
-            { field: 'size', caption: 'Size', size: '70px' },
-            { field: 'allocated', caption: 'Allocated Space', size: '100px' },
+            { field: 'size', caption: 'Size', size: '110px' },
+            { field: 'allocated', caption: 'Allocated Space', size: '110px' },
             { field: 'free', caption: 'Free Space', size: '100px' },
             { field: 'dedupratio', caption: 'Dedup Ratio', size: '75px' },
         ],
