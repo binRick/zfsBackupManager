@@ -3,10 +3,18 @@ var loadNodes = function(Nodes){
 var loadBackupNodes = function(Nodes){
 	console.log('Loading ' + Nodes.length + ' Backup Nodes');
 	_.each(Nodes, function(node, key){
-console.log(node);
+		console.log(node);
+		console.log(w2ui.backupNodesGrid.columns);	
+		var Rec = {recid: key, name: node.name};
+		_.each(w2ui.backupNodesGrid.columns.slice(1, w2ui.backupNodesGrid.columns.length), function(c){
+			if(_.contains(_.keys(node.tankPool), c.field))
+				Rec[c.field] = node.tankPool[c.field];
+		});
 		var tid = w2ui['backupNodesGrid'].find({'name': node.name});
 		if(tid.length==0){
-			w2ui.backupNodesGrid.add({recid: key, name: node.name});
+			w2ui.backupNodesGrid.add(Rec);
+		}else if(tid.length==1){
+			w2ui.backupNodes.grid.set(tid[0], Rec);
 		}
 		
 	});

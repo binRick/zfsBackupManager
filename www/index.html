@@ -39,8 +39,11 @@ $(function () {
         name: 'backupNodesGrid', 
         columns: [                
             { field: 'name', caption: 'Server', size: '150px' },
-            { field: 'logicalused_pb', caption: 'Logical Used', size: '100px' },
-            { field: 'used_pb', caption: 'Used', size: '75px' },
+            { field: 'health', caption: 'Health', size: '70px' },
+            { field: 'size', caption: 'Size', size: '70px' },
+            { field: 'allocated', caption: 'Allocated Space', size: '100px' },
+            { field: 'free', caption: 'Free Space', size: '100px' },
+            { field: 'dedupratio', caption: 'Dedup Ratio', size: '75px' },
         ],
 	onClick: function (event) {/*
             w2ui['grid2'].clear();

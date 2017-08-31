@@ -76,9 +76,9 @@ var backupNodes = function() {
                 };
             });
             N.tankPool = {};
-	_.each(o, function(O){
-		N.tankPool[O.property] = O.value;
-	});
+            _.each(o, function(O) {
+                N.tankPool[O.property] = O.value;
+            });
             _cb(null, N);
         }).stdout.on('data', function(s) {
             o += s.toString();
