@@ -20,20 +20,16 @@ var fs = require('fs'),
     NRP = require('node-redis-pubsub'),
     nrp = new NRP();
 
-var Nodes = [],
-    Filesystems = [],
+    var Filesystems = [],
     Snapshots = [];
 
-nrp.on('Nodes', function(myNodes) {
-    console.log('Received ' + myNodes.length + ' Nodes');
-    Nodes = myNodes;
-});
 nrp.on('Filesystems', function(myFilesystems) {
-    console.log('Received ' + myFilesystems.length + ' Filesystems');
+    console.log('Received ' + myFilesystems.Filesystems.length + ' Filesystems on node ' + myFilesystems.Node + ' among ' + myFilesystems.Nodes.length + ' nodes.');
     Filesystems = myFilesystems;
+	
 });
 nrp.on('Snapshots', function(mySnapshots) {
-    console.log('Received ' + mySnapshots.length + ' Snapshots');
+    console.log('Received ' + mySnapshots.Snapshots.length + ' Snapshots on node ' + mySnapshots.Node);
     Snapshots = mySnapshots;
 });
 io.on('connection', function(client) {  
@@ -50,9 +46,6 @@ app.use(express.static('www'));
 
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/www/index.html');
-});
-app.get('/api/nodes', function(req, res) {
-    res.json(Nodes);
 });
 app.get('/api/node/:node', function(req, res) {
     var properties = ['used', 'logicalused'];

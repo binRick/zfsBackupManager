@@ -10,8 +10,10 @@
 </head>
 <body>
 
-<div id="grid1" style="position: absolute; left: 0px; width: 49.9%; height: 400px;"></div>
+<div id="grid1" style="position: absolute; left: 0px;  width: 49.9%; height: 400px;"></div>
 <div id="grid2" style="position: absolute; right: 0px; width: 49.9%; height: 400px;"></div>
+<div id="grid3" style="position: absolute; top: 410px; left: 0px; width: 49.9%; height: 400px;"></div>
+<div id="grid4" style="position: absolute; top: 410px; right: 0px; width: 49.9%; height: 400px;"></div>
 <script>  
     var socket = io.connect();
     socket.on('connect', function(data) {
@@ -29,7 +31,7 @@ $(function () {
             { field: 'logicalused_pb', caption: 'Logical Used', size: '100px' },
             { field: 'used_pb', caption: 'Used', size: '75px' },
         ],
-	onClick: function (event) {
+	onClick: function (event) {/*
             w2ui['grid2'].clear();
             var record = this.get(event.recid);
             w2ui['grid2'].add([
@@ -38,16 +40,32 @@ $(function () {
                 { recid: 2, name: 'Last Name:', value: record.lname },
                 { recid: 3, name: 'Email:', value: record.email },
                 { recid: 4, name: 'Date:', value: record.sdate }
-            ]);
+            ]);*/
         },
     });    
     $('#grid2').w2grid({ 
-        header: 'Details',
+        header: 'Backup Nodes',
         name: 'grid2', 
         columns: [                
-            { field: 'value', caption: 'Value', size: '100%' }
+            { field: 'serverName', caption: 'Server', size: '150px' },
+            { field: 'logicalused_pb', caption: 'Logical Used', size: '100px' },
+            { field: 'used_pb', caption: 'Used', size: '75px' },
         ]
     }); 
+    $('#grid3').w2grid({
+        header: 'Details',
+        name: 'grid3',
+        columns: [
+            { field: 'value', caption: 'Value', size: '100%' }
+        ]
+    });
+    $('#grid4').w2grid({
+        header: 'Details',
+        name: 'grid4',
+        columns: [
+            { field: 'value', caption: 'Value', size: '100%' }
+        ]
+    });
 });
 </script>
 <script type="text/javascript" src="/js/loadServers.js"></script>
